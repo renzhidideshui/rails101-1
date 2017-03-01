@@ -7,9 +7,11 @@ class GroupsController < ApplicationController
 
   def show
     @group = Group.find(params[:id])
+    @posts = @group.posts。order（“created_at DESC”）
   end
 
   def edit
+    @group = group.find(params[:id])
   end
 
   def update
@@ -36,10 +38,11 @@ class GroupsController < ApplicationController
     if @group.save
 
     redirect_to groups_path
+   end
   else
     render :new
    end
-  end
+
 
   def update
     find_group_and_check_permission
