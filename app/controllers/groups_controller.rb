@@ -1,17 +1,17 @@
 class GroupsController < ApplicationController
   before_action :authenticate_user! ,only:[:new, :create, :edit, :update, :destroy]
-  before_action :find_group_and_chenk_permission, only: [:edit, :update, :destroy]
+  before_action :find_group_and_check_permission, only: [:edit, :update, :destroy]
   def index
     @groups =Group.all
   end
 
   def show
     @group = Group.find(params[:id])
-    @posts = @group.posts.recent.order("created_at DESC")
+    @posts = @group.posts.recent.paginate(:page => params[:page], :per_page =>5)
   end
 
   def edit
-    @group = group.find(params[:id])
+    @group = Group.find(params[:id])
   end
 
   def update
@@ -61,7 +61,7 @@ class GroupsController < ApplicationController
     @group.destroy
       redirect_to groups_path, alert: "Group deleted"
   end
-end
+
 
   private
 
@@ -76,3 +76,4 @@ end
   def group_params
      params.require(:group).permit(:title, :description)
   end
+end
